@@ -106,7 +106,7 @@ df = load_jobs_data()
 # ---------------------------------------------------------
 # NAVEGACIÓN DE BARRA LATERAL
 # ---------------------------------------------------------
-st.sidebar.title("💎 Stone Ops")
+st.sidebar.title("💎 JG-OperationSystem")
 st.sidebar.caption("Sistema de Gestión de Fabricación")
 st.sidebar.markdown("---")
 option = st.sidebar.radio(
