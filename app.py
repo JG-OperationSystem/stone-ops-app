@@ -8,7 +8,7 @@ from datetime import date
 # CONFIGURACIÓN DE PÁGINA
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="Gestión de Trabajos | Stone Ops",
+    page_title="Gestión de Trabajos | JG-OperationSystem",
     page_icon="💎",
     layout="wide",
     initial_sidebar_state="expanded"
