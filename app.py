@@ -114,23 +114,25 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 
 def load_data():
     try:
-        df = conn.read(worksheet="Production Intake", ttl="0d")
-        if not df.empty:
-            for idx, row in df.iterrows():
-                if "Job ID" in row.values:
-                    df.columns = row
-                    df = df.iloc[idx+1:].reset_index(drop=True)
-                    break
-            df = df.dropna(how="all")
-            if 'SqFt' in df.columns:
-                df['SqFt'] = pd.to_numeric(df['SqFt'].astype(str).str.replace(r'[^\d.]', '', regex=True), errors='coerce').fillna(0)
-            if 'Slabs' in df.columns:
-                df['Slabs'] = pd.to_numeric(df['Slabs'].astype(str).str.replace(r'[^\d.]', '', regex=True), errors='coerce').fillna(0)
+        # Lee la pestaña Production Intake omitiendo las 3 primeras filas de títulos
+        df = conn.read(worksheet="Production Intake", skiprows=3, ttl="0d")
+        
+        # Limpiar espacios en blanco de los nombres de columnas
+        df.columns = df.columns.astype(str).str.strip()
+        
+        # Eliminar filas vacías
+        df = df.dropna(how="all")
+        
+        # Formatear números de SqFt y Slabs
+        if 'SqFt' in df.columns:
+            df['SqFt'] = pd.to_numeric(df['SqFt'].astype(str).str.replace(r'[^\d.]', '', regex=True), errors='coerce').fillna(0)
+        if 'Slabs' in df.columns:
+            df['Slabs'] = pd.to_numeric(df['Slabs'].astype(str).str.replace(r'[^\d.]', '', regex=True), errors='coerce').fillna(0)
+            
         return df
     except Exception as e:
+        st.error(f"Error detallado de lectura: {e}")
         return pd.DataFrame()
-
-df = load_data()
 
 # HEADER SUPERIOR
 st.markdown("""
